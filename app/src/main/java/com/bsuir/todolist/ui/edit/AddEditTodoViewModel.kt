@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AddEditTodoViewModel @Inject constructor(
+open class AddEditTodoViewModel @Inject constructor(
     private val repository: TaskRepository,
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
@@ -25,13 +25,13 @@ class AddEditTodoViewModel @Inject constructor(
         private set
 
     var title by mutableStateOf("")
-        private set
+        internal set
 
     var description by mutableStateOf("")
-        private set
+        internal set
 
     private val _uiEvent =  Channel<UiEvent>()
-    val uiEvent = _uiEvent.receiveAsFlow()
+    open val uiEvent = _uiEvent.receiveAsFlow()
 
     init {
         val todoId = savedStateHandle.get<Int>("todoId")!!
@@ -46,7 +46,7 @@ class AddEditTodoViewModel @Inject constructor(
         }
     }
 
-    fun onEvent(event: AddEditTodoEvent) {
+    open fun onEvent(event: AddEditTodoEvent) {
         when(event) {
             is AddEditTodoEvent.OnTitleChange -> {
                 title = event.title
